@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,21 +36,35 @@ public class loadcontroller {
 		return loadserviceobj.getload();
 	}
 	
-	
-	@PostMapping("/load")
+	@PostMapping("/load/post")
 	public loadresponse postload(@RequestBody loadrequest loadrequestobj) {
-		System.out.print(loadrequestobj.getOwnerid());
+		//System.out.print(loadrequestobj.getOwnerid());
 		return loadserviceobj.postload(loadrequestobj);
 	}
-	@GetMapping("/load/{ownerid}")
-	public List<Load> findload(@RequestParam(name="ownerid",required=false) UUID ownerid)
+	
+	@GetMapping("/load/getbyid")
+	public Load findload(@RequestParam(name="ownerid",required=false) UUID ownerid)
 	{
 		return loadserviceobj.findLoad(ownerid);
 	}
-	@PutMapping("/load")
-    public loadresponse updateload(@RequestBody loadrequest loadrequestobj) {
-		
-		return loadserviceobj.updateload(loadrequestobj);
-		
+	
+	@GetMapping("/load/getbyname")
+	public Load findloadbyname(@RequestParam(name="name",required=false) String name)
+	{
+		return loadserviceobj.findLoadbyname(name);
 	}
+	
+	
+	@PutMapping("/load/update") 
+	public Load updateload(@RequestBody loadrequest loadrequestobj) 
+	{
+	    return loadserviceobj.updateload(loadrequestobj);
+	}
+	
+	@DeleteMapping("/load/delete")
+	public String deleteload(@RequestParam(name="ownerid",required=false) UUID ownerid)
+	{
+		return loadserviceobj.deleteload(ownerid);
+	}
+	 
 }

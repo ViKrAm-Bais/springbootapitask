@@ -15,6 +15,7 @@ import lombok.Data;
 @Data
 public class Load {
 	@Id
+	@GeneratedValue
 	private UUID id;
 	private UUID ownerid;
 	private String name;

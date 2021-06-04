@@ -10,6 +10,8 @@ import com.example.practice.model.loadresponse;
 public interface loadservice {
 	public List<Load> getload();
 	public loadresponse postload(loadrequest loadrequestobj);
-	public List<Load> findLoad(UUID ownerid);
-	public loadresponse updateload(loadrequest loadrequestobj);
+	public Load findLoad(UUID ownerid);
+	public Load updateload(loadrequest loadrequestobj);
+	public String deleteload(UUID ownerid);
+	public Load findLoadbyname(String name);
 }

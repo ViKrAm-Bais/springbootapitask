@@ -1,6 +1,8 @@
 package com.example.practice.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,6 @@ public class loadserviceimpl implements loadservice{
 	
 	
 	public List<Load> getload() {
-		
 		return loaddaoobj.findAll();
 	}
 
@@ -36,19 +37,68 @@ public class loadserviceimpl implements loadservice{
 		return loadresponseobj;
 	}
 	
-	public List<Load> findLoad(UUID ownerid)
+	public Load findLoad(UUID ownerid)
 	{
-		if(ownerid!=null)
-			 return loaddaoobj.findAllByOwnerId(ownerid);
-		return loaddaoobj.findByStatus("pending");
+		System.out.println("UUID is: " + ownerid);
+		Optional<Load> loadobj = loaddaoobj.findByowner(ownerid);
+		Load load = new Load();
+		if(loadobj.isPresent()) {
+			load = loadobj.get();
+			System.out.println("true");
+			return load;
+		}
+		else {
+			System.out.println("false");
+		}
+		return load;
+	}
+	
+	public Load findLoadbyname(String name)
+	{
+		System.out.println("name is: " + name);
+		Optional<Load> loadobj = loaddaoobj.findByname(name);
+		Load load = new Load();
+		if(loadobj.isPresent()) {
+			load = loadobj.get();
+			System.out.println("true");
+			return load;
+		}
+		else {
+			System.out.println("false");
+		}
+		return load;
 	}
 	
 
-	public loadresponse updateload(loadrequest loadrequestobj)
+	
+
+	public Load updateload(loadrequest loadrequestobj)
 	{
-		loadresponse loadresponseobj = new loadresponse();
-		return loadresponseobj;
+		System.out.println("UUID is: " + loadrequestobj.getOwnerid());
+		Optional<Load> loadobj = loaddaoobj.findByowner(loadrequestobj.getOwnerid());
+		if(loadobj.isPresent())
+		{
+			Load load = loadobj.get();
+			load.setName(loadrequestobj.getName());
+			load.setWork(loadrequestobj.getWork());
+			loaddaoobj.save(load);
+			return loadobj.get();
+		}
+		return null;
 	}
 	
-	
+
+	public String deleteload(UUID ownerid)
+	{
+		System.out.println("UUID is: " + ownerid);
+		Optional<Load> loadobj = loaddaoobj.findByowner(ownerid);
+		if(loadobj.isPresent())
+		{
+			Load load = loadobj.get();
+			loaddaoobj.delete(load);
+			return "Done";
+		}
+		else return "user not available";
+	}
+
 }
